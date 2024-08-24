@@ -1,0 +1,590 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LiteTecno Website</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            color: #FFFFFF;
+        }
+        video#background-video {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            min-width: 100%;
+            min-height: 100%;
+            width: auto;
+            height: auto;
+            z-index: -1;
+            transform: translate(-50%, -50%);
+            background-size: cover;
+        }
+        .content {
+            position: relative;
+            z-index: 2;
+            padding: 20px;
+            overflow: auto; /* Allow scroll for content */
+            max-height: 100vh; /* Limit height to viewport */
+        }
+        .navbar {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: rgba(26, 26, 26, 0.8); /* Make navbar semi-transparent */
+            padding: 10px;
+            flex-wrap: wrap;
+        }
+        .navbar-title {
+            color: #00FF00;
+            font-size: 24px;
+            font-weight: bold;
+            margin-right: auto;
+        }
+        .navbar a, .navbar button {
+            color: #FFFFFF;
+            background-color: #00FF00;
+            padding: 10px 20px;
+            margin: 0 10px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: transform 0.3s, background-color 0.3s;
+        }
+        .navbar a.youtube-btn {
+            background-color: #FF0000;
+        }
+        .navbar a.youtube-btn:hover {
+            transform: scale(1.1);
+            background-color: #AA0000;
+        }
+        .navbar a.telegram-btn {
+            background-color: #0088CC;
+        }
+        .navbar a.telegram-btn:hover {
+            transform: scale(1.1);
+            background-color: #005599;
+        }
+        #search {
+            width: 100%;
+            padding: 10px;
+            font-size: 18px;
+            box-sizing: border-box;
+            margin: 20px 0;
+            animation: rainbow 5s infinite;
+            border: 2px solid transparent;
+            border-radius: 5px;
+        }
+        .info-text {
+            font-weight: bold;
+            text-align: center;
+            border: 2px solid #FFFFFF;
+            padding: 10px;
+            margin: 20px 0;
+            animation: rainbow 5s infinite;
+        }
+        @keyframes rainbow {
+            0% { border-color: #FF0000; color: #FF0000; }
+            14% { border-color: #FF7F00; color: #FF7F00; }
+            28% { border-color: #FFFF00; color: #FFFF00; }
+            42% { border-color: #00FF00; color: #00FF00; }
+            57% { border-color: #0000FF; color: #0000FF; }
+            71% { border-color: #4B0082; color: #4B0082; }
+            85% { border-color: #8B00FF; color: #8B00FF; }
+            100% { border-color: #FF0000; color: #FF0000; }
+        }
+        .download-item {
+            background-color: rgba(26, 26, 26, 0.8); /* Make download item semi-transparent */
+            margin: 10px;
+            padding: 10px;
+            border-radius: 5px;
+            display: flex;
+            align-items: flex-start;
+        }
+        .download-item img {
+            width: 100px;
+            height: 100px;
+            margin-right: 10px;
+        }
+        .download-item .content {
+            flex: 1;
+        }
+        .download-item h2 {
+            color: #00FF00;
+            font-weight: bold;
+            margin: 0;
+        }
+        .download-item .description {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+        .download-item .description p {
+            color: #FFFFFF;
+            font-weight: bold;
+            background-color: #333333;
+            padding: 5px;
+            border-radius: 5px;
+            margin: 5px 0;
+        }
+        .download-item button {
+            background-color: #0000FF;
+            color: #FFFFFF;
+            border: none;
+            padding: 10px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            transition: transform 0.3s;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .download-item button:hover {
+            transform: scale(1.1);
+        }
+        .version-options {
+            display: none;
+            margin-top: 10px;
+        }
+        .version-options button {
+            margin-top: 5px;
+            background-color: #008CBA;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            transition-duration: 0.4s;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .version-options button:hover {
+            background-color: white; 
+            color: black; 
+            border: 2px solid #008CBA;
+        }
+        .login-premium {
+            margin: 20px 0;
+            text-align: center;
+        }
+        .login-button, .logout-button {
+            background-color: #FFD700;
+            color: #000;
+            font-weight: bold;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .login-button:hover, .logout-button:hover {
+            background-color: #FFC107;
+        }
+        .floating-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(26, 26, 26, 0.9);
+            border: 2px solid #FFFFFF;
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 1000;
+            text-align: center;
+        }
+        .floating-popup input {
+            padding: 10px;
+            margin-top: 10px;
+            border: 2px solid #FFFFFF;
+            border-radius: 5px;
+            width: 80%;
+        }
+        .close-popup {
+            background-color: #FF0000;
+            color: #FFFFFF;
+            border: none;
+            padding: 5px 10px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        .close-popup:hover {
+            background-color: #CC0000;
+        }
+        .expiry-message {
+            margin-top: 10px;
+            color: #00FF00;
+        }
+        .success-message {
+            display: none;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(0, 128, 0, 0.9);
+            color: #FFFFFF;
+            padding: 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            animation: fadeIn 0.5s, fadeOut 0.5s 2.5s forwards;
+            z-index: 1001;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeOut {
+            from { opacity: 1; }
+            to { opacity: 0; }
+        }
+        @media (max-width: 600px) {
+            .navbar {
+                flex-direction: column;
+                align-items: center;
+            }
+            .navbar-title {
+                margin-bottom: 10px;
+            }
+            .navbar a, .navbar button {
+                margin-bottom: 10px;
+            }
+            .download-item {
+                flex-direction: column;
+                align-items: center;
+            }
+            .download-item img {
+                width: 80px;
+                height: 80px;
+            }
+            .download-item button, .version-options button {
+                font-size: 14px;
+                padding: 8px;
+            }
+        }
+        .buy-premium-button {
+            display: block;
+            margin: 20px auto;
+            background-color: #FF69B4;
+            color: #FFF;
+            font-weight: bold;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .buy-premium-button:hover {
+            background-color: #FF1493;
+            transform: scale(1.05);
+        }
+
+        #premiumListPopup {
+            display: none;
+        }
+
+        .buy-button {
+            background-color: #32CD32;
+            color: #FFF;
+            border: none;
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        .buy-button:hover {
+            background-color: #228B22;
+        }
+
+        /* Floating popup untuk pesan informasi login */
+        .info-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #000;
+            color: #FFD700;
+            padding: 20px;
+            border-radius: 10px;
+            z-index: 1002;
+            font-weight: bold;
+            text-align: center;
+            animation: slideIn 1s ease-out;
+        }
+
+        @keyframes slideIn {
+            from { transform: translate(-50%, -150%); opacity: 0; }
+            to { transform: translate(-50%, -50%); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+    <video autoplay muted loop id="background-video">
+        <source src="https://www.dropbox.com/scl/fi/f6i8u573t2w5ypqeghglh/a5a5b81dcac672843366233375537e9a.mp4?rlkey=cnkcbycin1ewdbwte7pkhm2at&st=77vmvdnn&dl=1" type="video/mp4">
+        Your browser does not support HTML5 video.
+    </video>
+
+    <div class="content">
+        <div class="navbar">
+            <div class="navbar-title">LITE TECNO WEBSITE</div>
+            <a class="youtube-btn" href="https://youtube.com/@maxtecnoo?si=WhIdupkhm85Xn4no" target="_blank">YouTube</a>
+            <a class="telegram-btn" href="https://chat.whatsapp.com/I3g1qDBAGKQ4t7YWcDQUG9" target="_blank">Whatsapp Grup</a>
+            <button class="login-button" id="loginPremiumBtn">Login Premium</button>
+            <button class="logout-button" id="logoutPremiumBtn" style="display: none;">Logout Premium</button>
+        </div>
+        <input type="text" id="search" placeholder="Search...">
+        <button class="buy-premium-button" id="buyPremiumBtn">Beli Premium</button>
+
+        <div class="floating-popup" id="premiumListPopup">
+            <h3>HARGA PREMIUM LIST</h3>
+            <p>10K » 15 HARI VIP👑</p>
+            <p>30K » 45 HARI VIP👑</p>
+            <p>50K » PERMANEN VIP👑</p>
+            <p>Klik beli akan di arahkan ke WhatsApp admin dan chat admin nya untuk membeli</p>
+            <button class="buy-button" onclick="window.location.href='https://api.whatsapp.com/send/?phone=%2B6285738238937&text&type=phone_number&app_absent=0'">Beli</button>
+            <button class="close-popup" id="closePremiumListPopup">Tutup</button>
+        </div>
+        <div class="info-text">
+            [FREE MODE]👤 » LINK AKAN BERISI IKLAN MAKA DARI ITU KAMU HARUS MELEWATI IKLAN UNTUK MENDOWNLOAD NYA
+        </div>
+        <div class="info-text">
+            [PREMIUM MODE]👑 » AKSES SEMUA LINK DOWNLOAD TANPA IKLAN SEDIKITPUN DOWNLOAD JADI JAUH LEBIH MUDAH DAN SELALU DAPAT UPDATE 
+        </div>
+        
+        <!-- Floating Popup untuk Konfirmasi Logout -->
+        <div class="floating-popup" id="logoutConfirmPopup">
+            <h3>Apa benar kamu ingin logout dari akun?</h3>
+            <button class="close-popup" id="noLogoutBtn">Tidak</button>
+            <button class="close-popup" id="yesLogoutBtn">Ya</button>
+        </div>
+
+        <div class="floating-popup" id="loginPopup">
+            <h3>Login Premium</h3>
+            <input type="email" id="premiumEmail" placeholder="Masukkan Email" required>
+            <input type="password" id="premiumPassword" placeholder="Masukkan Password" required>
+            <button id="submitLogin">Login</button>
+            <button class="close-popup" id="closeLoginPopup">Tutup</button>
+            <div id="loginMessage" style="margin-top: 10px; color: #FF0000; display: none;"></div>
+            <div class="expiry-message" id="expiryMessage"></div>
+        </div>
+
+        <div class="floating-popup" id="notPremiumPopup">
+            <p>Kamu belum premium bahkan belum login sekalipun. Beli premium untuk akses.</p>
+            <button class="close-popup" id="closeNotPremiumPopup">Tutup</button>
+        </div>
+
+        <!-- Popup informasi login -->
+        <div class="info-popup" id="loginInfoPopup">
+            Email dan password akan di beri admin jika kamu sudah beli premium👑
+        </div>
+
+        <div class="download-item" data-name="SUPER TOUCH">
+            <img src="https://gcdnb.pbrd.co/images/AfteWXaHAmiz.jpg?o=1" alt="GPT-4o MOD Image">
+            <div class="content">
+                <h2>SUPER TOUCH</h2>
+                <div class="description">
+                    <p>TOUCH RESPONSIVE ✅</p>
+                    <p>NO DELAY TOUCH ✅</p>
+                    <p>SMOOTH TOUCH ✅</p>
+                    <p>BOOST TOUCH ✅</p>
+                    <p>UPDATE : NOT FOUND</p>
+                </div>
+                <button class="download-btn" type="button" aria-label="Toggle download options for GPT-4o MOD">Download</button>
+                <div class="version-options">
+                    <button type="button" data-link="https://sfl.gl/a1Et">⟨⟨⟨DOWNLOAD⟩⟩⟩ | 👤[FREE MODE]</button>
+                    <button class="premium-download-btn" type="button" data-link="https://www.mediafire.com/file/acymzajs91xumyv/Gpt-4o_V2.apk/file">⟨⟨⟨DOWNLOAD⟩⟩⟩ | 👑[PREMIUM MODE]</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pesan sukses login -->
+        <div class="success-message" id="successMessage">Berhasil Login! Sekarang Anda Pengguna Premium 👑</div>
+    </div>
+
+    <script>
+        const premiumUsers = {
+            "user1@gmail.com": {
+                password: "password1",
+                daysRemaining: 30
+            },
+            "user2@gmail.com": {
+                password: "password2",
+                daysRemaining: 30
+            },
+            "user3@gmail.com": {
+                password: "password3",
+                daysRemaining: 30
+            },
+            "user4@gmail.com": {
+                password: "pass4",
+                daysRemaining: 30
+            },
+            "user5@gmail.com": {
+                password: "password5",
+                daysRemaining: 30
+            }
+        };
+
+        // Load data dari localStorage
+        const savedEmail = localStorage.getItem('premiumEmail');
+        const savedPassword = localStorage.getItem('premiumPassword');
+        const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
+
+        // Menyembunyikan form login jika pengguna sudah login
+        if (isLoggedIn) {
+            document.getElementById('loginPremiumBtn').style.display = 'none';
+            document.getElementById('logoutPremiumBtn').style.display = 'inline-block';
+            document.getElementById('premiumEmail').value = savedEmail;
+            document.getElementById('premiumPassword').value = savedPassword;
+        }
+
+        document.getElementById('buyPremiumBtn').addEventListener('click', function() {
+            document.getElementById('premiumListPopup').style.display = 'block';
+        });
+
+        document.getElementById('closePremiumListPopup').addEventListener('click', function() {
+            document.getElementById('premiumListPopup').style.display = 'none';
+        });
+
+        document.getElementById('loginPremiumBtn').addEventListener('click', function() {
+            // Cek apakah pengguna sudah pernah login sebelumnya
+            if (!isLoggedIn) {
+                // Tampilkan popup informasi login
+                const loginInfoPopup = document.getElementById('loginInfoPopup');
+                loginInfoPopup.style.display = 'block';
+                setTimeout(() => {
+                    loginInfoPopup.style.display = 'none';
+                    document.getElementById('loginPopup').style.display = 'block';
+                }, 2500); // Tampilkan popup selama 2.5 detik, lalu tampilkan form login
+            } else {
+                document.getElementById('loginPopup').style.display = 'block';
+            }
+        });
+
+        document.getElementById('submitLogin').addEventListener('click', function() {
+            const emailInput = document.getElementById('premiumEmail').value;
+            const passwordInput = document.getElementById('premiumPassword').value;
+            const loginMessage = document.getElementById('loginMessage');
+            const expiryMessage = document.getElementById('expiryMessage');
+
+            // Reset pesan login
+            loginMessage.style.display = 'none';
+
+            // Validasi email
+            if (!emailInput.endsWith('@gmail.com')) {
+                loginMessage.style.color = '#FF0000';
+                loginMessage.textContent = 'Email harus menggunakan domain @gmail.com.';
+                loginMessage.style.display = 'block';
+                return;
+            }
+
+            // Cek apakah email ada di premiumUsers
+            const user = premiumUsers[emailInput];
+            if (user) {
+                // Cek password
+                if (user.password === passwordInput) {
+                    loginMessage.style.color = '#00FF00';
+                    loginMessage.textContent = 'Login berhasil! Anda sekarang Premium.';
+                    expiryMessage.textContent = `Masa berlaku premium: ${user.daysRemaining} hari.`;
+                    document.getElementById('loginPremiumBtn').style.display = 'none';
+                    document.getElementById('logoutPremiumBtn').style.display = 'inline-block'; // Tampilkan tombol logout
+                    document.getElementById('loginPopup').style.display = 'none'; // Sembunyikan popup login
+                    showSuccessMessage(); // Tampilkan pesan sukses login
+
+                    // Simpan informasi login di localStorage
+                    localStorage.setItem('premiumEmail', emailInput);
+                    localStorage.setItem('premiumPassword', passwordInput);
+                    localStorage.setItem('isLoggedIn', 'true');
+                } else {
+                    loginMessage.style.color = '#FF0000';
+                    loginMessage.textContent = 'Email atau password salah! Silahkan coba lagi.';
+                }
+            } else {
+                loginMessage.style.color = '#FF0000';
+                loginMessage.textContent = 'Email atau password salah! Silahkan coba lagi.';
+            }
+            loginMessage.style.display = 'block';
+        });
+
+        function showSuccessMessage() {
+            const successMessage = document.getElementById('successMessage');
+            successMessage.style.display = 'block';
+            setTimeout(() => {
+                successMessage.style.display = 'none';
+            }, 3000); // Tampilkan selama 3 detik
+        }
+
+        document.getElementById('closeLoginPopup').addEventListener('click', function() {
+            document.getElementById('loginPopup').style.display = 'none';
+        });
+
+        document.getElementById('closeNotPremiumPopup').addEventListener('click', function() {
+            document.getElementById('notPremiumPopup').style.display = 'none';
+        });
+
+        document.getElementById('search').addEventListener('input', function(e) {
+            const searchVal = e.target.value.toLowerCase();
+            const items = document.querySelectorAll('.download-item');
+            items.forEach(function(item) {
+                const name = item.querySelector('h2').textContent.toLowerCase();
+                item.style.display = name.indexOf(searchVal) !== -1 ? 'flex' : 'none';
+            });
+        });
+
+        const downloadBtns = document.querySelectorAll('.download-btn');
+        downloadBtns.forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                const versionOptions = e.target.nextElementSibling;
+                versionOptions.style.display = versionOptions.style.display === 'block' ? 'none' : 'block';
+            });
+        });
+
+        const versionBtns = document.querySelectorAll('.version-options button');
+        versionBtns.forEach(function(btn) {
+            btn.addEventListener('click', function(e) {
+                const link = e.target.getAttribute('data-link');
+                if (e.target.classList.contains('premium-download-btn')) {
+                    const loggedInUserEmail = localStorage.getItem('premiumEmail');
+                    const loggedInUserPassword = localStorage.getItem('premiumPassword');
+                    if (loggedInUserEmail && loggedInUserPassword) {
+                        window.location.href = link;
+                    } else {
+                        document.getElementById('notPremiumPopup').style.display = 'block';
+                    }
+                } else {
+                    window.location.href = link;
+                }
+            });
+        });
+
+        // Logout dengan konfirmasi
+        document.getElementById('logoutPremiumBtn').addEventListener('click', function() {
+            document.getElementById('logoutConfirmPopup').style.display = 'block'; // Tampilkan popup konfirmasi
+        });
+
+        document.getElementById('noLogoutBtn').addEventListener('click', function() {
+            document.getElementById('logoutConfirmPopup').style.display = 'none'; // Tutup popup jika tidak
+        });
+
+        document.getElementById('yesLogoutBtn').addEventListener('click', function() {
+            localStorage.removeItem('premiumEmail');
+            localStorage.removeItem('premiumPassword');
+            localStorage.removeItem('isLoggedIn');
+            document.getElementById('loginPremiumBtn').style.display = 'inline-block';
+            document.getElementById('logoutPremiumBtn').style.display = 'none';
+            document.getElementById('expiryMessage').textContent = ''; // Reset pesan masa berlaku
+            document.getElementById('logoutConfirmPopup').style.display = 'none'; // Tutup popup konfirmasi setelah logout
+        });
+    </script>
+</body>
+</html>
